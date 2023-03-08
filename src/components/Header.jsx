@@ -29,11 +29,7 @@ function Header() {
         />
         <div className="create">
           <div className="connect-button">
-            <ConnectButton
-              showBalance={false}
-              // chainStatus="icon"
-              // accountStatus="avatar"
-            />
+            <ConnectButton showBalance={false} />
           </div>
         </div>
       </div>

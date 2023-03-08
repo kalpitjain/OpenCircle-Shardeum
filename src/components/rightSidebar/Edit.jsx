@@ -1,117 +1,117 @@
-import axios from 'axios'
-import React, { useState } from 'react'
-import configData from '../../Data.json'
-import { ethers } from 'ethers'
+import axios from "axios";
+import React, { useState } from "react";
+import configData from "../../Data.json";
+import { ethers } from "ethers";
 // import { useAccount } from 'wagmi'
 // import { upload } from '@testing-library/user-event/dist/upload'
 
 function Edit() {
-  const [userName, setUserName] = useState()
-  const [userBio, setUserBio] = useState()
+  const [userName, setUserName] = useState();
+  const [userBio, setUserBio] = useState();
 
   function handleNameChange(event) {
-    setUserName(event.target.value)
+    setUserName(event.target.value);
   }
 
   function handleBioChange(event) {
-    setUserBio(event.target.value)
+    setUserBio(event.target.value);
   }
 
   const openCircleContract = {
     contractAddress: configData.MumbaiContractAddress,
     contractAbi: configData.abi,
-  }
+  };
 
-  const [image, setImage] = useState(null)
-  const [displayImage, setDisplayImage] = useState(null)
+  const [image, setImage] = useState(null);
+  const [displayImage, setDisplayImage] = useState(null);
   function handleImageChange(event) {
     if (event.target.files && event.target.files[0]) {
-      const img = event.target.files[0]
-      setDisplayImage(URL.createObjectURL(img))
-      setImage(event.target.files[0])
+      const img = event.target.files[0];
+      setDisplayImage(URL.createObjectURL(img));
+      setImage(event.target.files[0]);
     }
   }
 
   async function uploadImage() {
-    const data = new FormData()
-    data.append('file', image)
-    let imgUrl = ''
+    const data = new FormData();
+    data.append("file", image);
+    let imgUrl = "";
 
     try {
       if (image) {
         const response = await axios.post(
-          'https://api.pinata.cloud/pinning/pinFileToIPFS',
+          "https://api.pinata.cloud/pinning/pinFileToIPFS",
           data,
           {
             headers: {
-              'Content-Type': 'multipart/form-data',
-              pinata_api_key: 'd9abe1a7fb96903a8d0b',
+              "Content-Type": "multipart/form-data",
+              pinata_api_key: "52a084fdd2c59360dcb7",
               pinata_secret_api_key:
-                '78c4e76c51d023766c626297fbb4298565b02a20952cc6488e1988c7cfc35aa3',
+                "8ce0d49080a717d547482ac09191e276dd4cdbe49e67200313cd82c9cd6d7cfd",
             },
-          },
-        )
-        imgUrl = 'https://gateway.pinata.cloud/ipfs/' + response.data.IpfsHash
+          }
+        );
+        imgUrl = "https://gateway.ipfs.io/ipfs/" + response.data.IpfsHash;
       }
 
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      await window.ethereum.request({ method: 'eth_requestAccounts' })
-      const signer = provider.getSigner()
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await window.ethereum.request({ method: "eth_requestAccounts" });
+      const signer = provider.getSigner();
 
       const contract = new ethers.Contract(
         openCircleContract.contractAddress,
         openCircleContract.contractAbi,
-        signer,
-      )
+        signer
+      );
 
       const createPost = async (url) => {
-        const tx = await contract.setUserProfileImage(url)
-        await tx.wait()
-      }
+        const tx = await contract.setUserProfileImage(url);
+        await tx.wait();
+      };
 
-      await createPost(imgUrl, { gasLimit: 300000 })
-      setImage(null)
-      setDisplayImage(null)
+      await createPost(imgUrl, { gasLimit: 300000 });
+      setImage(null);
+      setDisplayImage(null);
     } catch (err) {
-      console.log(err)
-      alert('Unable to Upload Image')
+      console.log(err);
+      alert("Unable to Upload Image");
     }
   }
 
   async function uploadName() {
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    await window.ethereum.request({ method: 'eth_requestAccounts' })
-    const signer = provider.getSigner()
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await window.ethereum.request({ method: "eth_requestAccounts" });
+    const signer = provider.getSigner();
 
     const contract = new ethers.Contract(
       openCircleContract.contractAddress,
       openCircleContract.contractAbi,
-      signer,
-    )
+      signer
+    );
 
     const tx = await contract.setUserName(userName, {
       gasLimit: 300000,
-    })
-    await tx.wait()
-    window.location.reload()
+    });
+    await tx.wait();
+    window.location.reload();
   }
 
   async function uploadBio() {
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    await window.ethereum.request({ method: 'eth_requestAccounts' })
-    const signer = provider.getSigner()
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await window.ethereum.request({ method: "eth_requestAccounts" });
+    const signer = provider.getSigner();
 
     const contract = new ethers.Contract(
       openCircleContract.contractAddress,
       openCircleContract.contractAbi,
-      signer,
-    )
+      signer
+    );
 
     const tx = await contract.setUserBio(userBio, {
       gasLimit: 300000,
-    })
-    await tx.wait()
-    window.location.reload()
+    });
+    await tx.wait();
+    window.location.reload();
   }
 
   return (
@@ -169,6 +169,6 @@ function Edit() {
         Update Bio
       </button>
     </>
-  )
+  );
 }
-export default Edit
+export default Edit;

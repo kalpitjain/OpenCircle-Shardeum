@@ -1,18 +1,18 @@
-import { useAccount } from 'wagmi'
-import React from 'react'
-import { Link } from 'react-router-dom'
-import UserInfo from './UserInfo'
+import { useAccount } from "wagmi";
+import React from "react";
+import { Link } from "react-router-dom";
+import UserInfo from "./UserInfo";
 
 function LeftSidebar() {
-  const { address: userAddress } = useAccount()
+  const { address: userAddress } = useAccount();
   return (
     <>
       <div className="left">
-        <Link to={'/profile'}>
+        <Link to={"/profile"}>
           <UserInfo address={userAddress} />
         </Link>
         <div className="sidebar">
-          <Link to={'/'}>
+          <Link to={"/"}>
             <span className="menu-item">
               <span>
                 <i className="uil uil-home"></i>
@@ -21,7 +21,7 @@ function LeftSidebar() {
             </span>
           </Link>
 
-          <Link to={'/explore'}>
+          <Link to={"/explore"}>
             <span className="menu-item">
               <span>
                 <i className="uil uil-compass"></i>
@@ -31,7 +31,7 @@ function LeftSidebar() {
           </Link>
         </div>
 
-        <Link to={'/Create'}>
+        <Link to={"/create"}>
           <label for="create-post" className="btn btn-primary">
             <span>
               <i className="uil uil-edit"></i>
@@ -41,7 +41,7 @@ function LeftSidebar() {
         </Link>
       </div>
     </>
-  )
+  );
 }
 
-export default LeftSidebar
+export default LeftSidebar;
